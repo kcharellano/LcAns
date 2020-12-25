@@ -1,11 +1,12 @@
 '''
+
+    https://leetcode.com/problems/course-schedule-ii
     Topological Sort solution
     Time: O(V+E) b/c dfs traverses every edge and vertex once
     Space: O(V+E)
 '''
 from collections import deque
 class Solution:
-    
     # accepts a directed graph as an adj list(dictionary?).
     def topologicalSort(self, graph, nodeStates, ordering, currentNode):
         # mark node state as 'in process'
