@@ -45,8 +45,8 @@ class SetNodeOpt:
         otherAbsRepr = other.find()
         # merge and update size of new repr
         if myAbsRepr._size > otherAbsRepr._size:
-            self._merge(otherAbsRepr, myAbsRepr)
-            myAbsRepr._size += otherAbsRepr
+            otherAbsRepr._repr = myAbsRepr
+            myAbsRepr._size += otherAbsRepr._size
         else:
-            self._merge(myAbsRepr, otherAbsRepr)
-            otherAbsRepr._size += myAbsRepr
+            myAbsRepr._repr = otherAbsRepr
+            otherAbsRepr._size += myAbsRepr._size
