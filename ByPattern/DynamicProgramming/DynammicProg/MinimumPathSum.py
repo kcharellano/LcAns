@@ -1,4 +1,6 @@
+# https://leetcode.com/problems/minimum-path-sum
 '''
+    DP min/max path cost sum
     DP solution. Create a mxn table where each cell contains the
     minimum path cost to get from (0,0) to that cell.
     Time:O(m*n)
@@ -27,4 +29,19 @@ class Solution:
                     table[row+1][col] = min(table[row+1][col], table[row][col] + grid[row+1][col])
 
         # return bottom right cell from table
-        return table[m-1][n-1] 
+        return table[m-1][n-1]
+
+from math import inf
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        rowLen, colLen = len(grid), len(grid[0])
+        dp = [[inf for i in range(colLen)] for j in range(rowLen)]
+        for row in range(rowLen):
+            for col in range(colLen):
+                leftPath = dp[row][col-1] if col-1 >= 0 else inf
+                upPath = dp[row-1][col] if row-1 >= 0 else inf
+                if leftPath == inf and upPath == inf:
+                    dp[row][col] = grid[row][col]
+                else:
+                    dp[row][col] = min(leftPath, upPath) + grid[row][col]
+        return dp[rowLen-1][colLen-1]
