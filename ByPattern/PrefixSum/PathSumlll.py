@@ -37,3 +37,35 @@ class Solution:
         
         self.dfs(root, sum, 0, cache)
         return self.ans
+
+# another version
+from collections import defaultdict
+class Solution:
+    def dfs(self, node, cache, rsum, k):
+        if node == None:
+            return
+        
+        # add current node to prefix sum
+        rsum += node.val
+        
+        # check if valid path exists in current path
+        self.count += cache[rsum-k]
+        
+        # add prefix sum to cache
+        cache[rsum] += 1
+        
+        # dfs search
+        self.dfs(node.left, cache, rsum, k)
+        self.dfs(node.right, cache, rsum, k)
+        
+        # backtrack -- remove current path to 
+        cache[rsum] -= 1
+    
+    def pathSum(self, root: TreeNode, sum: int) -> int:
+        self.count = 0
+        cache = defaultdict(int)
+        cache[0] = 1
+        self.dfs(root, cache, 0, sum)
+        return self.count
+        
+        
