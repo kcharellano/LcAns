@@ -2,66 +2,47 @@
 
 '''
     Algorithm: Sliding Window -- dynamic variation
-        - Keep a set of the original target characters
-        - keep a set of remaining characters needed to make window valid
+        - Keep a set of the original target characters (tchars)
+        - keep a set of remaining characters needed to make window valid(missing)
         - Store target letter counts inside the window using a dict
-        - expand window inside outer string until remaining characters is empty
-            - then shrink window until remaining characters is not empty
+        - expand window until it contains all characters in t
+        - shrink window while it contains all charactesrs in t
     Time: O(max(len(s), len(t)))
     Space: O(max(len(s), len(t)))
 '''
 
-from math import inf
 from collections import defaultdict
-
+from math import inf
 class Solution:
-    '''
-    adds letter to window and adds letter to remaining
-    if letter count > 0
-    '''
-    def addLetter(self, window, letter, remaining):
-        window[letter] += 1
-        if window[letter] > 0 and not letter in remaining:
-            remaining.add(letter)
-    
-    '''
-    removes letter from window and removes letter from remaining
-    if lettercount <= 0
-    '''
-    def removeLetter(self, window, letter, remaining):
-        window[letter] -= 1
-        if window[letter] <= 0 and letter in remaining:
-            remaining.remove(letter)
-    
     def minWindow(self, s: str, t: str) -> str:
-        # letters in s
-        targetChars = set(t)
-        # remaining letters needed to make window valid
-        remaining = set(t)
-        # important target character count in the current window
+        # constant used to process only important chars
+        tchars = set(t)
+        # contains letters that the window is missing
+        missing = set(t)
+        # maintains missing t-letter counts inside window
+        # -- a negative value means we have more than necessary
+        # -- a positive value means the window is missing x many letters
+        # -- a zero count means just enough letters
         window = defaultdict(int)
-        for l in t:
-            window[l] += 1
-        
-        start = 0
-        end = 0
         left = 0
-        minLength = inf
-        for i in range(len(s)):
-            if s[i] in targetChars:
-                self.removeLetter(window, s[i], remaining)
-            while not remaining:
-                # update answer range
-                if (i - left) < minLength:
-                    minLength = min(minLength, i - start)
-                    end = i + 1
-                    start = left
-                # add letter to window 
-                if s[left] in targetChars:
-                    self.addLetter(window, s[left], remaining)
+        start, end = 0, inf
+        for letter in t:
+            window[letter] += 1
+        # only process letters in tchars
+        for i, letter in enumerate(s):
+            # if letter is a tchar then update window
+            if letter in tchars:
+                window[letter] -= 1
+                if window[letter] == 0:
+                    missing.remove(letter)
+            while not missing:
+                # update min sub range
+                if i - left < end - start:
+                    end, start = i, left
+                # if left points to a tchar then update window
+                if s[left] in tchars:
+                    window[s[left]] += 1
+                    if window[s[left]] > 0:
+                        missing.add(s[left])
                 left += 1
-                
-        return s[start:end] if minLength != inf else ""
-            
-                
-        
+        return s[start:end+1] if end != inf else ""

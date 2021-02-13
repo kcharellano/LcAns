@@ -1,27 +1,21 @@
 '''
     Algorithm: Dynamic Sliding Window
-        - expand right until rsum < target
-        - shrink left while rsum >= target
+        - expand window right while rsum < target
+        - once rsum becomes greater or equal to target begin shrinking in order
+        to find minimal subrange
     Time: O(N)
     Space: O(1)
 '''
 from math import inf
 class Solution:
-    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
-        n = len(nums)
-        ans = inf
-        left = 0
-        rsum = 0
-        target = s
-        count = 0
-        for right in range(n):
-            # expand rsum < target
-            rsum += nums[right]
-            count += 1
-            # shrink rsum while rsum >= target
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        rsum, left = 0, 0
+        minSize = inf
+        for i, num in enumerate(nums):
+            rsum += num
             while rsum >= target:
-                ans = min(ans, count)
+                #(i-left+1) = size of window
+                minSize = min(minSize, i-left+1) 
                 rsum -= nums[left]
                 left += 1
-                count -= 1
-        return ans if ans != inf else 0
+        return minSize if minSize != inf else 0
