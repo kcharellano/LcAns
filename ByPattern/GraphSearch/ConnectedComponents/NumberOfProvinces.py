@@ -5,6 +5,8 @@
     - Use the union find data structure to find connected components
     Time: O(N^2)
     Space: O(N)
+    Find: Determine which subset a particular element is in. This can be used for determining if two elements are in the same subset.
+    Union: Join two subsets into a single subset.
 '''
 class Solution:
     
@@ -13,13 +15,13 @@ class Solution:
             self.rep = self
             self.value = value
             self.size = 1
-    
+
     # returns a node's representative
     def find(self, node):
         if node.rep != node:
             node.rep = self.find(node.rep)
         return node.rep
-    
+
     # merges(aka union) two sets
     def merge(self, a, b):
         repB = self.find(b)
@@ -30,7 +32,7 @@ class Solution:
         else:
             repB.size += repA.size
             repA.rep = repB
-    
+
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         rowSize, colSize = len(isConnected), len(isConnected[0])
         # create set nodes
@@ -48,7 +50,7 @@ class Solution:
                     a = nodeLs[row]
                     b = nodeLs[col]                    
                     self.merge(nodeLs[row], nodeLs[col])
-     
+        
         # count the number of distinct sets
         count = 0
         for node in nodeLs:
