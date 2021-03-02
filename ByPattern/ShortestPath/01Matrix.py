@@ -34,9 +34,7 @@ class Solution:
                     queue.append((nextRow, nextCol, steps+1))
         
         return -1
-            
-            
-    
+
     def updateMatrix(self, matrix: List[List[int]]) -> List[List[int]]:
         rowSize, colSize = len(matrix), len(matrix[0])
         ans = [[0 for j in range(colSize)] for i in range(rowSize)]

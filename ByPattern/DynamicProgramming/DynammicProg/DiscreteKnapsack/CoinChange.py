@@ -4,7 +4,7 @@
     - Build a 2d table and follow the piecewise function
                         { inf                                          if row < 0 or col < 0
         dp[row][col] =  { 0                                            if col == 0
-                        { min(dp[row-1][col], dp[row][col-coinVal])    otherwise
+                        { min(dp[row-1][col], dp[row][col-coinVal]+1)    otherwise
     Time: O(N^2), N = # of coins
     Space: O(N^2)
     NOTE: Items do not need sorting
