@@ -58,3 +58,27 @@ class Solution:
                 count += 1
         return count
                 
+'''
+    Algorithm: Connected Components in Undirected Graph
+    - Use DFS to find the number of connected components
+    - Count the number of times DFS is triggered
+    Time: O(N^2)
+    Space: O(N)
+'''
+class Solution:
+    def dfs(self, graph, node, visited, n):
+        for i in range(n):
+            if graph[node][i] == 1 and i not in visited:
+                visited.add(i)
+                self.dfs(graph, i, visited, n)
+    
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        visited = set()
+        n = len(isConnected)
+        count = 0
+        for node in range(n):
+            if node not in visited:
+                self.dfs(isConnected, node, visited, n)
+                count += 1
+        return count
+                
